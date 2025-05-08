@@ -1,0 +1,105 @@
+classDiagram
+
+    TaskQueue <|.. SqliteQueue
+    TaskQueue <|.. JsonQueue
+    PrinterProfile *-- Printer
+    PrinterProfile *-- TaskQueue
+    Printer *-- PrinterDriver
+    PrinterProfileManager <-- PrinterProfile
+    PrinterDriver <|.. EpsonPrinterDriver
+    PrinterDriver <|.. CitizenPrinterDriver
+    
+    class OrderPoller{
+        +string API_URL
+        +int pollingInterval
+        +boolean isPolling
+        +Order[] lastRes
+
+        +startPolling()
+        +stopPolling()
+        +compareChange()
+    }
+    class OrderRouter{
+        +routeNewOrder(renderer, orders)
+    }
+    class Renderer{
+        +render(printingTemplate, order)
+    }
+    class PrinterProfileManager{
+        +PrinterProfile[] printerProfiles
+        +createPrinterProfile()
+        +deletePrinterProfile()
+        +savePrinterProfile()
+        +loadPrinterProfile()
+    }
+    class PrinterProfile{
+        +string name
+        +string location
+        +string[] acceptPrintingFormats
+        +Printer printer
+        +TaskQueue taskQueue
+
+        +startAutoPrintTask()
+        +stopAutoPrintTask()
+        +printTask()
+    }
+    class TaskQueue{
+        +string storageType
+        +string storageLocation
+
+        +load()
+        +unload()
+        +isEmpty() boolean
+        +enqueue(tasks)
+        +dequeue(fromIndex, count)
+    }
+    class SqliteQueue{
+        +string storageType
+        +string storageLocation
+
+        +load()
+        +unload()
+        +enqueue(tasks)
+        +dequeue(fromIndex, count)
+    }
+    class JsonQueue{
+        +string storageType
+        +string storageLocation
+
+        +load()
+        +unload()
+        +enqueue(tasks)
+        +dequeue(fromIndex, count)
+    }
+    class Printer{
+        +string macAddress
+        +string connectionInterface
+        +string ipAddress
+        +string comport
+        +string deviceName
+        +PrinterDriver printerDriver
+
+        +connect()
+        +disconnect()
+        +getStatus()
+        +print()
+
+    }
+    class PrinterDriver{
+        +connect()
+        +disconnect()
+        +getStatus()
+        +print()
+    }
+    class EpsonPrinterDriver{
+        +connect()
+        +disconnect()
+        +getStatus()
+        +print()
+    }
+    class CitizenPrinterDriver{
+        +connect()
+        +disconnect()
+        +getStatus()
+        +print()
+    }

@@ -1,0 +1,85 @@
+flowchart TD
+    OP[Order Poller]
+    R[Renderer]
+    TC1[Task Creator]
+    TC2[Task Creator]
+    TC3[Task Creator]
+    TQ1[Task Queue]
+    TQ2[Task Queue]
+    TQ3[Task Queue]
+    PC[Printing Compiler]
+    P1[Printer 1]
+    P2[Printer 2]
+    P3[Printer 3]
+    PS1[Printer Status 1]
+    PS2[Printer Status 2]
+    PS3[Printer Status 3]
+    PM[Profile Manager]
+    V[View #40;UI/UX#41;]
+
+    OP --> OrderRouter
+
+    OrderRouter --> PrinterProfile1
+    OrderRouter --> PrinterProfile2
+    OrderRouter --> PrinterProfile3
+
+    PM --> PrinterProfile1
+    PM --> PrinterProfile2
+    PM --> PrinterProfile3
+    
+    TaskBroker1 --> PC
+    TaskBroker2 --> PC
+    TaskBroker3 --> PC
+
+    PC --> PrinterConnection1
+    PC --> PrinterConnection2
+    PC --> PrinterConnection3
+
+    PrinterConnection1 --> P1
+    PrinterConnection2 --> P2
+    PrinterConnection3 --> P3
+
+    subgraph OrderRouter
+        R
+    end
+
+    subgraph PrinterProfile1
+        TC1
+        TC1 --> TaskBroker1
+        subgraph TaskBroker1
+            TQ1
+        end     
+    end
+
+    subgraph PrinterProfile2
+        TC2
+        TC2 --> TaskBroker2
+        subgraph TaskBroker2
+            TQ2
+        end     
+    end
+
+    subgraph PrinterProfile3
+        TC3
+        TC3 --> TaskBroker3
+        subgraph TaskBroker3
+            TQ3
+        end     
+    end
+
+    subgraph Printer Driver
+        PC
+        subgraph PrinterConnection1
+            PS1
+        end
+        subgraph PrinterConnection2
+            PS2
+        end
+        subgraph PrinterConnection3
+            PS3
+        end
+    end
+    
+    subgraph React Native
+        V
+    end
