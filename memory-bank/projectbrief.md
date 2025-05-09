@@ -2,6 +2,12 @@
 
 ## Project Brief
 
+**Additional Goals:**
+- Ensure future-proof, maintainable codebase with best practices.
+- Provide easy debugging and monitoring for development and long-term maintenance.
+- Meet business-critical requirements for reliability and error handling in POS printing environments.
+
+
 **Goal:** Build a mobile app (Expo/React Native) for the catering industry.
 
 **Function:**

@@ -15,5 +15,12 @@
 
 **Dependencies:**
 - Expo
+- SQLite for queue persistence
+- Logging/monitoring tools
+- React Native printer libraries (Bluetooth, WiFi, Serial, Ethernet)
+- Local storage for profile/queue persistence
+
+- SQLite and JSON for queue persistence.
+- Expo
 - React Native printer libraries (Bluetooth, WiFi, Serial, Ethernet)
 - Local storage for profile/queue persistence

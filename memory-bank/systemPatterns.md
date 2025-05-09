@@ -2,6 +2,30 @@
 
 ## System Patterns
 
+### Class-Based Modular Architecture
+
+#### Reliability & Debugging Patterns
+- Robust queue management to prevent overload and lag.
+- Logging and monitoring for print jobs, printers, and device status.
+- Error handling/reporting for missing receipts and unresponsive printers.
+- Audit trail for receipt templates, printer settings, and user access.
+- User authentication for sensitive actions.
+
+- `PrintingModule`: Central orchestrator, owns OrderPoller, OrderRenderer, ReceiptRouter.
+- `OrderPoller`: Handles polling the server for new orders.
+- `OrderRenderer`: Converts orders into printable formats using `PrintingTemplates`.
+- `ReceiptRouter`: Routes orders/receipts to the correct printer/profile via `PrinterProfileManager`.
+- `PrinterProfileManager`: Manages printer profiles, their queues, and drivers.
+- `PrinterProfile`: Represents a single printer, associated with a `PrinterDriver` and a `TaskQueue`.
+- `PrinterDriver`: Abstract base for specific drivers (e.g., `EpsonPrinterDriver`, `CitizenPrinterDriver`).
+- `TaskQueue`: Abstract queue for print tasks, with implementations for `SqliteQueue` and `JsonQueue`.
+- `PrintingTemplates`: Manages templates for rendering receipts/orders.
+
+#### Patterns
+- Strategy pattern for printer drivers and queue implementations.
+
+
+
 **Architecture:**
 - Expo mobile app with modular connection manager for Bluetooth, WiFi, Serial (USB/RS232), and Ethernet printers.
 - Polling service fetches order receipts from a central server.

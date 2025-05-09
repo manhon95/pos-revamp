@@ -2,7 +2,9 @@
 
 ## Progress
 
-**What Works:** Memory bank and planning structure.
+**What Works:**
+- POS Printing requirements integrated into memory bank.
+- Architecture class diagram created and documented in system patterns. Memory bank and planning structure.
 
 **To Build:** Core app, polling logic, printer integration, UI.
 

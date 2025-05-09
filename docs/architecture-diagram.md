@@ -1,3 +1,6 @@
+# App Architecture Class Diagram
+
+```mermaid
 classDiagram
 
     PrintingModule o-- OrderPoller
@@ -21,7 +24,7 @@ classDiagram
         +start()
         +stop()
     }
-    
+
     class OrderPoller{
         -string API_URL
         +int pollingInterval
@@ -81,7 +84,7 @@ classDiagram
         +changePrinter(newPrinter)
     }
     class TaskQueue{
-        <<interface>> 
+        <<interface>>
         +string storageType
         +string storageLocation
         -length
@@ -121,7 +124,7 @@ classDiagram
         +dequeue(fromIndex, count)
     }
     class PrinterDriver{
-        <<interface>> 
+        <<interface>>
         -string macAddress
         -string connectionInterface
         -string ipAddress
@@ -163,3 +166,6 @@ classDiagram
         +getStatus()
         +print()
     }
+```
+
+This diagram visualizes the modular architecture of the app, showing the flow from polling orders to printing.
