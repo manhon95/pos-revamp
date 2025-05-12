@@ -1,0 +1,40 @@
+sequenceDiagram
+    participant User
+    participant View
+    participant OrderPoller
+    participant ReceiptRouter
+    participant ProfileManager
+    participant PrinterProfile
+    participant TaskQueue
+    participant PrinterDriver
+
+    User->>View: Initiate app / configure printers
+    activate View
+    View->>OrderPoller: Start polling server
+    activate OrderPoller
+    loop Polling Interval
+        OrderPoller->>OrderPoller: poll()
+        OrderPoller->>ReceiptRouter: new orders
+        activate ReceiptRouter
+        ReceiptRouter->>ProfileManager: get printer profiles
+        activate ProfileManager
+        ProfileManager-->>ReceiptRouter: profile/queue
+        deactivate ProfileManager
+        ReceiptRouter->>PrinterProfile: route order
+        deactivate ReceiptRouter
+        activate PrinterProfile
+        PrinterProfile->>TaskQueue: create print task
+        activate TaskQueue
+        TaskQueue->>PrinterDriver: send print job
+        activate PrinterDriver
+        PrinterDriver-->>TaskQueue: print result
+        deactivate PrinterDriver
+        TaskQueue-->>PrinterProfile: status
+        deactivate TaskQueue
+        PrinterProfile-->>View: update queue/status
+        deactivate PrinterProfile
+    end
+    View-->>User: Show print status/alerts
+    Note over PrinterProfile,View: If error (e.g., printer offline)
+    PrinterProfile-->>View: show error, allow queue resumption
+    View-->>User: Notify, allow retry/switch printer
