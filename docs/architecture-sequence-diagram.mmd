@@ -14,8 +14,13 @@ sequenceDiagram
     activate OrderPoller
     loop Polling Interval
         OrderPoller->>OrderPoller: poll()
-        OrderPoller->>ReceiptRouter: new orders
-        activate ReceiptRouter
+        alt Network error
+            OrderPoller-->>View: show network error
+            View-->>User: Notify network error, allow retry
+        else Success
+            OrderPoller->>ReceiptRouter: new orders
+            activate ReceiptRouter
+        end
         ReceiptRouter->>ProfileManager: get printer profiles
         activate ProfileManager
         ProfileManager-->>ReceiptRouter: profile/queue
@@ -24,13 +29,19 @@ sequenceDiagram
         deactivate ReceiptRouter
         activate PrinterProfile
         PrinterProfile->>TaskQueue: create print task
-        activate TaskQueue
-        TaskQueue->>PrinterDriver: send print job
-        activate PrinterDriver
-        PrinterDriver-->>TaskQueue: print result
-        deactivate PrinterDriver
-        TaskQueue-->>PrinterProfile: status
-        deactivate TaskQueue
+        alt Task queue read/write error
+            TaskQueue-->>PrinterProfile: show queue error
+            PrinterProfile-->>View: show task queue error, allow retry
+            View-->>User: Notify task queue error, allow retry
+        else Success
+            activate TaskQueue
+            TaskQueue->>PrinterDriver: send print job
+            activate PrinterDriver
+            PrinterDriver-->>TaskQueue: print result
+            deactivate PrinterDriver
+            TaskQueue-->>PrinterProfile: status
+            deactivate TaskQueue
+        end
         PrinterProfile-->>View: update queue/status
         deactivate PrinterProfile
     end
